@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel 快捷键挑战赛 🎮</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 主菜单 -->
+        <div id="mainMenu" class="screen">
+            <div class="menu-container">
+                <h1>📊 Excel 快捷键挑战赛</h1>
+                <p class="subtitle">用键盘掌握 Excel 快捷键</p>
+                
+                <div class="stats-box">
+                    <div class="stat">
+                        <span class="stat-label">今日最高分</span>
+                        <span class="stat-value" id="todayScore">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">总练习题数</span>
+                        <span class="stat-value" id="totalQuestions">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">正确率</span>
+                        <span class="stat-value" id="correctRate">0%</span>
+                    </div>
+                </div>
+
+                <div class="menu-options">
+                    <div class="menu-item selected" data-mode="beginner">
+                        <span class="mode-icon">⭐</span>
+                        <span class="mode-name">初级模式</span>
+                        <span class="mode-desc">15个基础快捷键</span>
+                    </div>
+                    <div class="menu-item" data-mode="intermediate">
+                        <span class="mode-icon">🔥</span>
+                        <span class="mode-name">中级模式</span>
+                        <span class="mode-desc">30个常用快捷键</span>
+                    </div>
+                    <div class="menu-item" data-mode="advanced">
+                        <span class="mode-icon">💎</span>
+                        <span class="mode-name">高级模式</span>
+                        <span class="mode-desc">50+个全部快捷键</span>
+                    </div>
+                    <div class="menu-item" data-mode="practice">
+                        <span class="mode-icon">📚</span>
+                        <span class="mode-name">自由练习</span>
+                        <span class="mode-desc">无时间限制，随时挑战</span>
+                    </div>
+                </div>
+
+                <div class="hint-box">
+                    <p>⌨️ 使用 <kbd>↑</kbd> <kbd>↓</kbd> 选择，按 <kbd>ENTER</kbd> 开始</p>
+                    <p>按 <kbd>?</kbd> 查看帮助 | 按 <kbd>S</kbd> 查看统计</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div id="gameScreen" class="screen hidden">
+            <div class="game-container">
+                <div class="game-header">
+                    <div class="game-title">
+                        <span id="gameModeName"></span>
+                        <span class="level-badge" id="levelBadge"></span>
+                    </div>
+                    <div class="game-stats">
+                        <span class="stat-item">题号: <span id="questionNum">1</span>/<span id="totalNum">10</span></span>
+                        <span class="stat-item">分数: <span id="gameScore">0</span></span>
+                        <span class="stat-item" id="timerDisplay"></span>
+                    </div>
+                </div>
+
+                <div class="game-content">
+                    <div class="question-box">
+                        <p class="question-label">【任务】</p>
+                        <p class="question-text" id="questionText">加载中...</p>
+                    </div>
+
+                    <div class="answer-input-box">
+                        <p class="input-label">按下你的快捷键组合：</p>
+                        <div class="input-display" id="inputDisplay">
+                            <span class="input-placeholder">等待输入...</span>
+                        </div>
+                        <p class="input-hint">按 ENTER 提交 | 按 Backspace 清除</p>
+                    </div>
+
+                    <div class="feedback-box" id="feedbackBox"></div>
+
+                    <div class="hint-section">
+                        <button class="hint-btn" id="hintBtn">💡 获得提示 (H键)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果界面 -->
+        <div id="resultScreen" class="screen hidden">
+            <div class="result-container">
+                <h2 id="resultTitle">太棒了！</h2>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span class="result-label">最终得分</span>
+                        <span class="result-value" id="finalScore">0</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-label">答题数</span>
+                        <span class="result-value" id="answeredCount">0</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-label">正确率</span>
+                        <span class="result-value" id="resultCorrectRate">0%</span>
+                    </div>
+                </div>
+
+                <div class="wrong-answers" id="wrongAnswers"></div>
+
+                <div class="result-actions">
+                    <button class="btn btn-primary" id="retryBtn">🔄 再来一次 (R键)</button>
+                    <button class="btn btn-secondary" id="menuBtn">🏠 返回菜单 (ESC)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 帮助界面 -->
+        <div id="helpScreen" class="screen hidden">
+            <div class="help-container">
+                <h2>❓ 游戏帮助</h2>
+                <div class="help-content">
+                    <div class="help-section">
+                        <h3>🎮 如何游戏</h3>
+                        <ol>
+                            <li>在主菜单中选择游戏模式</li>
+                            <li>看题目，输入对应的快捷键</li>
+                            <li>按 ENTER 提交答案</li>
+                            <li>获得即时反馈和得分</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>⌨️ 快捷键操作</h3>
+                        <table class="help-table">
+                            <tr>
+                                <td><kbd>↑</kbd> <kbd>↓</kbd></td>
+                                <td>在菜单中选择</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>ENTER</kbd></td>
+                                <td>提交答案 / 开始游戏</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>ESC</kbd></td>
+                                <td>返回菜单</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>R</kbd></td>
+                                <td>重新开始</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>H</kbd></td>
+                                <td>获得提示</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>?</kbd></td>
+                                <td>显示帮助</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>S</kbd></td>
+                                <td>查看统计</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Backspace</kbd></td>
+                                <td>清除输入</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🎯 游戏模式</h3>
+                        <p><strong>初级模式：</strong> 15个最常用的基础快捷键，适合入门</p>
+                        <p><strong>中级模式：</strong> 30个快捷键，包括导航和编辑操作</p>
+                        <p><strong>高级模式：</strong> 50+个全部快捷键，包括高级功能</p>
+                        <p><strong>自由练习：</strong> 无时间限制，自己掌握速度</p>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>💡 建议</h3>
+                        <ul>
+                            <li>从初级模式开始，逐步提升难度</li>
+                            <li>每天坚持练习，提高反应速度</li>
+                            <li>错题可以单独练习</li>
+                            <li>尽量快速反应，培养肌肉记忆</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="closeHelpBtn">关闭 (ESC)</button>
+            </div>
+        </div>
+
+        <!-- 统计界面 -->
+        <div id="statsScreen" class="screen hidden">
+            <div class="stats-container">
+                <h2>📊 学习统计</h2>
+                <div class="stats-content">
+                    <div class="stat-card">
+                        <h3>今日数据</h3>
+                        <div class="stat-data">
+                            <p>最高分: <span id="statTodayScore">0</span></p>
+                            <p>总题数: <span id="statTotalQuestions">0</span></p>
+                            <p>正确率: <span id="statCorrectRate">0%</span></p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>模式统计</h3>
+                        <div id="modeStats"></div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>掌握度</h3>
+                        <div id="masteryChart"></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="closeStatsBtn">关闭 (ESC)</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data/shortcuts.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
